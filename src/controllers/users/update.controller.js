@@ -4,7 +4,7 @@ const { updateOneById } = require("../../services/users/update.service");
 module.exports.updateOneById = async (req, res) => {
   try {
     const { id } = req.params;
-    const update = req.body.update;
+    const update = req.body;
 
     if (req.user._id != id && !req.isAdmin) {
       return response.unauthorized(res, "Can't modify another user's info");
@@ -19,7 +19,7 @@ module.exports.updateOneById = async (req, res) => {
         return response.success(res, usr);
       })
       .catch((err) => {
-        return response.badRequest(res, err);
+        return response.badRequest(res, err.message);
       });
   } catch (err) {
     return response.internalError(res, "Internal Server Error");

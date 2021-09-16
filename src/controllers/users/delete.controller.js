@@ -14,7 +14,7 @@ module.exports.deleteOneById = (req, res) => {
         return response.success(res, usr);
       })
       .catch((err) => {
-        return response.badRequest(res, err);
+        return response.badRequest(res, err.message);
       });
   } catch (err) {
     return response.internalError(res, "Internal Server Error");

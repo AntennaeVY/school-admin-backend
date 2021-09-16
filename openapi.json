@@ -128,7 +128,7 @@
             }
           },
           "400": {
-            "description": "Bad request, required properties missing or invalid",
+            "description": "Bad request, required properties missing or invalid.",
             "content": {
               "application/json": {
                 "schema": {
@@ -139,8 +139,7 @@
                       "default": false
                     },
                     "response": {
-                      "description": "Error Object",
-                      "type": "object"
+                      "type": "string"
                     }
                   }
                 }
@@ -227,7 +226,7 @@
                       "default": false
                     },
                     "response": {
-                      "type": "object"
+                      "type": "string"
                     }
                   }
                 }
@@ -316,7 +315,7 @@
             }
           },
           "400": {
-            "description": "Bad request, id parameter is missing.",
+            "description": "Bad request, id parameter is invalid.",
             "content": {
               "application/json": {
                 "schema": {
@@ -327,8 +326,7 @@
                       "default": false
                     },
                     "response": {
-                      "description": "Error Object",
-                      "type": "object"
+                      "type": "string"
                     }
                   }
                 }
@@ -396,17 +394,12 @@
           }
         ],
         "requestBody": {
-          "description": "JSON object of User properties to be updated. Properties must match User schema",
+          "description": "JSON object with any User properties to be updated.",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "update": {
-                    "type": "object"
-                  }
-                }
+                "$ref": "#/components/schemas/User"
               }
             }
           }
@@ -432,7 +425,7 @@
             }
           },
           "400": {
-            "description": "Bad request, id parameter might be missing, update object might contain invalid properties.",
+            "description": "Bad request, id parameter might be invalid, update object might contain invalid properties/values.",
             "content": {
               "application/json": {
                 "schema": {
@@ -443,8 +436,7 @@
                       "default": false
                     },
                     "response": {
-                      "description": "Error Object",
-                      "type": "object"
+                      "type": "string"
                     }
                   }
                 }
@@ -543,8 +535,7 @@
                       "default": false
                     },
                     "response": {
-                      "description": "Error Object",
-                      "type": "object"
+                      "type": "string"
                     }
                   }
                 }
