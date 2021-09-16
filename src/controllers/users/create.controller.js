@@ -3,7 +3,7 @@ const { createUser } = require("../../services/users/create.service");
 
 module.exports.createUser = (req, res) => {
   try {
-    createUser(req.body)
+    createUser(req.body.data)
       .then((usr) => {
         return response.success(res, usr);
       })

@@ -9,10 +9,6 @@ module.exports.getOneById = async (id) => {
     throw new Error("Id must be provided");
   }
 
-  if (Number(id) == NaN) {
-    throw new Error("Id must be a number");
-  }
-
   return await User.findById(id);
 };
 

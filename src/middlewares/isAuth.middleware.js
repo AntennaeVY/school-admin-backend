@@ -2,7 +2,8 @@ const { response } = require("../utils/response");
 const { verifyToken, decodeToken } = require("../utils/token");
 
 module.exports.isAuth = (req, res, next) => {
-  const token = req.headers["authorization"];
+  let header = req.headers["authorization"];
+  const token = header.split(" ")[1];
 
   if (!token) {
     return response.badRequest(

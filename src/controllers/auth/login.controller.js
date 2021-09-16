@@ -14,7 +14,7 @@ module.exports.login = (req, res) => {
         return response.success(res, token);
       })
       .catch((err) => {
-        return response.forbidden(res, err);
+        return response.forbidden(res, err.message);
       });
   } catch (err) {
     return response.internalError(res, "Internal Server Error");

@@ -4,7 +4,7 @@ const { updateOneById } = require("../../services/users/update.service");
 module.exports.updateOneById = async (req, res) => {
   try {
     const { id } = req.params;
-    const update = req.body;
+    const update = req.body.update;
 
     if (req.user._id != id && !req.isAdmin) {
       return response.unauthorized(res, "Can't modify another user's info");
