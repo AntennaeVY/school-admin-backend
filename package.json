@@ -1,6 +1,9 @@
 {
   "name": "school-admin-backend",
   "version": "1.0.0",
+  "engines": {
+    "node": "16.4.2"
+  },
   "description": "",
   "main": "server.js",
   "scripts": {
