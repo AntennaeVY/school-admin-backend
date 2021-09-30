@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 
 // Modules
-// const cors = require("cors");
+const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocumment = require("../openapi.json");
 
@@ -20,7 +20,7 @@ app.set("PORT", process.env.PORT || 3000);
 require("./database/database");
 
 // Middlewares
-// app.use(cors({ origin: "*" }));
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api", routes);
