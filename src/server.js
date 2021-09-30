@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 
 // Modules
-const cors = require("cors");
+// const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocumment = require("../openapi.json");
 

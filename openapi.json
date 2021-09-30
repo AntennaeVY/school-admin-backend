@@ -2,11 +2,11 @@
   "openapi": "3.0.0",
   "info": {
     "title": "School Admin API",
-    "version": "0.0.1"
+    "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://api.example.com/v1",
+      "url": "https://school-admin-backend.herokuapp.com/api/",
       "description": "Main (production) server"
     }
   ],
