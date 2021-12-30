@@ -1,9 +1,5 @@
 module.exports.isAdmin = (req, res, next) => {
-  if (req.user.role != "ADMIN_ROLE") {
-    req.isAdmin = false;
-  } else {
-    req.isAdmin = true;
-  }
+  req.isAdmin = req.user.role != "ADMIN_ROLE";
 
   next();
 };
