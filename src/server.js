@@ -10,7 +10,7 @@ const swaggerDocumment = require("../openapi.json");
 const routes = require("./routes/routes");
 
 // Environment Variables
-if (process.env.NODE_ENV == "dev") {
+if (process.env.NODE_ENV !== "production") {
   require("dotenv").config({ path: `${__dirname}/.env` });
 }
 
@@ -30,3 +30,5 @@ app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocumment));
 app.listen(app.get("PORT"), () => {
   console.log(`App listening on PORT ${app.get("PORT")}`);
 });
+
+module.exports = app;

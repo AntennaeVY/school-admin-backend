@@ -103,6 +103,15 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/User"
+              },
+              "example": {
+                "name": "John",
+                "dni": "10010001",
+                "date_of_birth": "31/01/1999",
+                "phone_number": "555-555-555",
+                "email": "user@example.com",
+                "password": "password",
+                "avatar": "http://freeimages.com/avatar.jpg"
               }
             }
           }
@@ -252,6 +261,25 @@
               }
             }
           },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "response": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal Server Error",
             "content": {
@@ -335,6 +363,25 @@
           },
           "401": {
             "description": "Unauthorized, token is missing or expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "response": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -462,6 +509,25 @@
               }
             }
           },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "response": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal Server Error",
             "content": {
@@ -524,7 +590,7 @@
             }
           },
           "400": {
-            "description": "Bad request, id parameter might be missing.",
+            "description": "Bad request, id parameter might be invalid.",
             "content": {
               "application/json": {
                 "schema": {

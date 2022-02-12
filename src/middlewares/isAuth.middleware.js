@@ -5,7 +5,7 @@ module.exports.isAuth = (req, res, next) => {
   let header = req.headers["authorization"];
 
   if (!header) {
-    return response.badRequest(
+    return response.unauthorized(
       res,
       "No token provided in headers, please log in"
     );
@@ -14,7 +14,7 @@ module.exports.isAuth = (req, res, next) => {
   const token = header.split(" ")[1];
 
   if (!token) {
-    return response.badRequest(
+    return response.unauthorized(
       res,
       "No token provided in headers, please log in"
     );

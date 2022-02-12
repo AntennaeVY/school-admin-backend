@@ -21,6 +21,7 @@ module.exports.getOneById = (req, res) => {
 
     getOneById(id)
       .then((usr) => {
+        if (!usr) return response.notFound(res, "User not found");
         return response.success(res, usr);
       })
       .catch((err) => {
@@ -35,6 +36,7 @@ module.exports.getOneByEmail = (req, res) => {
   try {
     getOneByEmail(req.body.email)
       .then((usr) => {
+        if (!usr) return response.notFound(res, "User not found");
         return response.success(res, usr);
       })
       .catch((err) => {

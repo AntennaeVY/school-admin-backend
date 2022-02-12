@@ -9,7 +9,7 @@ module.exports.updateOneById = async (id, update) => {
 
   if (!ObjectId.isValid(id)) {
     throw new Error("Invalid id");
-  } else if (ObjectID(id) != id) {
+  } else if (ObjectId(id) != id) {
     throw new Error("Invalid id");
   }
 

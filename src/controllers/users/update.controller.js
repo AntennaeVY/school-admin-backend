@@ -16,6 +16,7 @@ module.exports.updateOneById = async (req, res) => {
 
     updateOneById(id, update)
       .then((usr) => {
+        if (!usr) return response.notFound(res, "User doesn't exist");
         return response.success(res, usr);
       })
       .catch((err) => {
