@@ -20,5 +20,9 @@ module.exports.updateOneById = async (id, update) => {
   if (typeof update != "object") {
     throw new Error("Update must be an object");
   }
-  return await User.findByIdAndUpdate(id, update, { new: true });
+  return await User.update(update, {
+    where: {
+      _id: id,
+    },
+  });
 };

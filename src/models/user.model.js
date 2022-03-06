@@ -1,74 +1,92 @@
-const { Schema, model } = require("mongoose");
+const { DataTypes, Model, UUIDV4 } = require("sequelize");
+const sequelize = require("../database/database");
 const { encryptPassword } = require("../utils/encrypt");
 
-const uniqueValidator = require("mongoose-unique-validator");
+class User extends Model {
+  toJSON() {
+    const userObject = this;
+    delete userObject.password;
+    return userObject;
+  }
+}
 
-const userSchema = new Schema({
-  name: {
-    type: String,
-    required: [true, "Name is required"],
+User.init(
+  {
+    _id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      defaultValue: DataTypes.UUIDV4,
+    },
+
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+
+    dni: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      primaryKey: true,
+    },
+
+    date_of_birth: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      set(value) {
+        this.setDataValue("date_of_birth", new Date(value));
+      },
+    },
+
+    phone_number: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        is: /^\+[0-9]{1,3}\s[0-9]{4,15}$/,
+      },
+    },
+
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true,
+      },
+    },
+
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      set(value) {
+        this.setDataValue("password", encryptPassword(value));
+      },
+    },
+
+    avatar: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        isUrl: true,
+      },
+      defaultValue:
+        "https://media.istockphoto.com/photos/gorgeous-ginger-cat-on-isolated-black-background-picture-id1018078858?k=20&m=1018078858&s=612x612&w=0&h=N8HorY5Ipk-RibWqx3zPERGpdB0ZT8mIhCvkDPRql6A=",
+    },
+
+    role: {
+      type: DataTypes.STRING,
+      defaultValue: "USER_ROLE",
+      validate: {
+        isIn: ["USER_ROLE", "ADMIN_ROLE", "TEACHER_ROLE"],
+      },
+    },
+
+    status: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
   },
+  { sequelize, modelName: "Users" }
+);
 
-  dni: {
-    type: String,
-    required: [true, "DNI is required"],
-  },
-
-  date_of_birth: {
-    type: Date,
-    required: [true, "DoB is required"],
-  },
-
-  phone_number: {
-    type: String,
-    required: [true, "Phone number is required"],
-  },
-
-  email: {
-    type: String,
-    required: [true, "Email is required"],
-    unique: true,
-    match:
-      /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/,
-  },
-
-  _password: {
-    type: String,
-    required: [true, "Password is required"],
-  },
-
-  avatar: {
-    type: String,
-    required: false,
-  },
-
-  role: {
-    type: String,
-    default: "USER_ROLE",
-    enum: ["USER_ROLE", "ADMIN_ROLE"],
-  },
-
-  status: {
-    type: Boolean,
-    default: true,
-  },
-});
-
-userSchema.plugin(uniqueValidator);
-
-userSchema
-  .virtual("password")
-  .get(function () {
-    return this._password;
-  })
-  .set(function (value) {
-    this._password = encryptPassword(value);
-  });
-
-userSchema.methods.toJSON = function () {
-  const userObject = this.toObject();
-  delete userObject._password;
-  return userObject;
-};
-
-module.exports = model("User", userSchema);
+module.exports = User;

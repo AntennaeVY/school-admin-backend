@@ -2,7 +2,7 @@ const User = require("../../models/user.model");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 module.exports.getAllUsers = async () => {
-  return await User.find({});
+  return await User.findAll();
 };
 
 module.exports.getOneById = async (id) => {
@@ -16,7 +16,11 @@ module.exports.getOneById = async (id) => {
     throw new Error("Invalid id");
   }
 
-  const user = await User.findById(id);
+  const user = await User.findAll({
+    where: {
+      _id: id,
+    },
+  });
 
   return user;
 };
@@ -30,7 +34,11 @@ module.exports.getOneByEmail = async (email) => {
     throw new Error("Email must be a string");
   }
 
-  const user = await User.findOne({ email });
+  const user = await User.findAll({
+    where: {
+      email: email,
+    },
+  });
 
   return user;
 };

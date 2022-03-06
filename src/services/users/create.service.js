@@ -1,3 +1,4 @@
+const req = require("express/lib/request");
 const User = require("../../models/user.model");
 
 module.exports.createUser = async (data) => {
@@ -9,5 +10,6 @@ module.exports.createUser = async (data) => {
     throw new Error("Data must be an object");
   }
 
+  delete data.role;
   return await User.create(data);
 };

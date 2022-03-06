@@ -107,8 +107,8 @@
               "example": {
                 "name": "John",
                 "dni": "10010001",
-                "date_of_birth": "31/01/1999",
-                "phone_number": "555-555-555",
+                "date_of_birth": "01/31/1999",
+                "phone_number": "+58 1234567890",
                 "email": "user@example.com",
                 "password": "password",
                 "avatar": "http://freeimages.com/avatar.jpg"

@@ -5,5 +5,9 @@ module.exports.deleteOneById = async (id) => {
     throw new Error("Id must be provided");
   }
 
-  return await User.findByIdAndDelete(id);
+  return await User.destroy({
+    where: {
+      _id: id,
+    },
+  });
 };
