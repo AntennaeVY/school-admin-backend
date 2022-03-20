@@ -34,7 +34,7 @@ module.exports.getOneById = (req, res) => {
 
 module.exports.getOneByEmail = (req, res) => {
   try {
-    getOneByEmail(req.body.email)
+    getOneByEmail(req.params.emailBase64)
       .then((usr) => {
         if (!usr) return response.notFound(res, "User not found");
         return response.success(res, usr);

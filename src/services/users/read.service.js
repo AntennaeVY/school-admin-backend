@@ -1,44 +1,59 @@
 const User = require("../../models/user.model");
-const ObjectId = require("mongoose").Types.ObjectId;
+const { decodeBase64 } = require("../../utils/encrypt");
 
 module.exports.getAllUsers = async () => {
-  return await User.findAll();
+  const users = await User.findAll();
+
+  users.map((user) => {
+    newUser = user?.toJSON();
+    return newUser;
+  });
+
+  return users;
 };
 
-module.exports.getOneById = async (id) => {
+module.exports.getOneById = async (id, hasPass = false) => {
   if (!id) {
     throw new Error("Id must be provided");
   }
 
-  if (!ObjectId.isValid(id)) {
-    throw new Error("Invalid id");
-  } else if (ObjectId(id) != id) {
-    throw new Error("Invalid id");
+  const user = (
+    await User.findAll({
+      where: {
+        _id: id,
+      },
+    })
+  )[0];
+
+  try {
+    return hasPass ? user : user.toJSON();
+  } catch (e) {
+    return null;
   }
-
-  const user = await User.findAll({
-    where: {
-      _id: id,
-    },
-  });
-
-  return user;
 };
 
-module.exports.getOneByEmail = async (email) => {
-  if (!email) {
+module.exports.getOneByEmail = async (emailBase64, hasPass = false) => {
+  if (!emailBase64) {
     throw new Error("Email must be provided");
   }
 
-  if (typeof email != "string") {
+  if (typeof emailBase64 != "string") {
     throw new Error("Email must be a string");
   }
 
-  const user = await User.findAll({
-    where: {
-      email: email,
-    },
-  });
+  const email = decodeBase64(emailBase64);
 
-  return user;
+  const user = (
+    await User.findAll({
+      where: {
+        email: email,
+      },
+    })
+  )[0];
+
+  try {
+    return hasPass ? user : user.toJSON();
+  } catch (e) {
+    return null;
+  }
 };

@@ -11,5 +11,12 @@ module.exports.createUser = async (data) => {
   }
 
   delete data.role;
-  return await User.create(data);
+
+  const user = await User.create(data);
+
+  try {
+    return user.toJSON();
+  } catch (e) {
+    return null;
+  }
 };

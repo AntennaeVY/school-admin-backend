@@ -5,7 +5,19 @@ const { encryptPassword } = require("../utils/encrypt");
 class User extends Model {
   toJSON() {
     const userObject = this;
-    delete userObject.password;
+    delete userObject.dataValues.password;
+    return userObject.dataValues;
+  }
+
+  toToken() {
+    const userObject = this.dataValues;
+
+    const validKeys = ["_id", "email", "role"];
+
+    Object.keys(userObject).forEach(
+      (key) => validKeys.includes(key) || delete userObject[key]
+    );
+
     return userObject;
   }
 }
@@ -16,9 +28,15 @@ User.init(
       type: DataTypes.UUID,
       allowNull: false,
       defaultValue: DataTypes.UUIDV4,
+      validate: {
+        isUUID: {
+          args: [4],
+          msg: "Invalid ID format",
+        },
+      },
     },
 
-    name: {
+    fullName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -27,7 +45,6 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-      primaryKey: true,
     },
 
     date_of_birth: {
@@ -42,7 +59,10 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        is: /^\+[0-9]{1,3}\s[0-9]{4,15}$/,
+        is: {
+          args: [/^\+[0-9]{1,3}\s[0-9]{4,15}$/],
+          msg: "Invalid phone number format",
+        },
       },
     },
 
@@ -51,23 +71,34 @@ User.init(
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: true,
+        isEmail: {
+          args: [true],
+          msg: "Invalid email format",
+        },
       },
+      primaryKey: true,
     },
+
+    // Password is nullable (Might change??)
 
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       set(value) {
         this.setDataValue("password", encryptPassword(value));
       },
     },
 
+    // Default Avatar value for testing, be aware of it..
+
     avatar: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        isUrl: true,
+        isUrl: {
+          args: [true],
+          msg: "Invalid url for avatar",
+        },
       },
       defaultValue:
         "https://media.istockphoto.com/photos/gorgeous-ginger-cat-on-isolated-black-background-picture-id1018078858?k=20&m=1018078858&s=612x612&w=0&h=N8HorY5Ipk-RibWqx3zPERGpdB0ZT8mIhCvkDPRql6A=",
@@ -77,13 +108,29 @@ User.init(
       type: DataTypes.STRING,
       defaultValue: "USER_ROLE",
       validate: {
-        isIn: ["USER_ROLE", "ADMIN_ROLE", "TEACHER_ROLE"],
+        isIn: {
+          args: [["USER_ROLE", "ADMIN_ROLE", "TEACHER_ROLE"]],
+          msg: "Invalid role format",
+        },
       },
     },
 
-    status: {
+    isBachelor: {
       type: DataTypes.BOOLEAN,
-      defaultValue: true,
+      allowNull: false,
+      defaultValue: false,
+    },
+
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "PENDING",
+      validate: {
+        isIn: {
+          args: [["ACTIVE", "PENDING", "INACTIVE"]],
+          msg: "Invalid state format",
+        },
+      },
     },
   },
   { sequelize, modelName: "Users" }

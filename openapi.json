@@ -6,25 +6,23 @@
   },
   "servers": [
     {
-      "url": "https://school-admin-backend.herokuapp.com/api/",
-      "description": "Main (production) server"
+      "url": "http://localhost:3000",
+      "description": "Main (development) server"
     }
   ],
   "tags": [
     {
-      "name": "users",
-      "description": "CRUD for users"
+      "name": "Users"
     },
     {
-      "name": "auth",
-      "description": "Authentication services"
+      "name": "Auth"
     }
   ],
   "paths": {
-    "/users": {
+    "/api/users": {
       "get": {
-        "tags": ["users"],
-        "summary": "Get all users.",
+        "tags": ["Users"],
+        "summary": "List all users.",
         "security": [
           {
             "bearerAuth": []
@@ -32,61 +30,39 @@
         ],
         "responses": {
           "200": {
-            "description": "Returns a Response object with a JSON array of User objects in \"response\" property",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": true
-                    },
-                    "response": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/User"
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/GetUsers_ResT"
                 }
               }
             }
           },
           "401": {
-            "description": "Unauthorized, token is missing or expired",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/GetUsers_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Token is missing or expired"
                 }
               }
             }
           },
           "500": {
-            "description": "Internal Server Error",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/GetUsers_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Internal Server Error"
                 }
               }
             }
@@ -94,82 +70,54 @@
         }
       },
       "post": {
-        "tags": ["users"],
-        "summary": "Create a new user",
+        "tags": ["Users"],
+        "summary": "Create a new user.",
         "requestBody": {
-          "description": "JSON object with User schema properties",
+          "description": "JSON object with `User` schema properties",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
-              },
-              "example": {
-                "name": "John",
-                "dni": "10010001",
-                "date_of_birth": "01/31/1999",
-                "phone_number": "+58 1234567890",
-                "email": "user@example.com",
-                "password": "password",
-                "avatar": "http://freeimages.com/avatar.jpg"
+                "$ref": "#/components/schemas/CreateUser_ReqT"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Returns a Response object with a new created User object with provided data in \"response\" property",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": true
-                    },
-                    "response": {
-                      "$ref": "#/components/schemas/User"
-                    }
-                  }
+                  "$ref": "#/components/schemas/CreateUser_ResT"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request, required properties missing or invalid.",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/CreateUser_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Required properties missing or invalid"
                 }
               }
             }
           },
           "500": {
-            "description": "Internal Server Error",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/CreateUser_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Internal Server Error"
                 }
               }
             }
@@ -177,124 +125,90 @@
         }
       }
     },
-    "/users/email": {
-      "post": {
-        "tags": ["users"],
-        "summary": "Fetch an User by email",
+    "/api/users/email": {
+      "put": {
+        "tags": ["Users"],
+        "summary": "Update user by email.",
+        "description": "User can only update himself. Must be admin to update anyone",
         "security": [
           {
             "bearerAuth": []
           }
         ],
         "requestBody": {
-          "description": "Email of the User to be fetched",
+          "description": "JSON object with `User` schema properties",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "format": "email"
-                  }
-                }
+                "$ref": "#/components/schemas/UpdateUserByEmail_ReqT"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Returns Response object with fetched User object in \"response\" property",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": true
-                    },
-                    "response": {
-                      "$ref": "#/components/schemas/User"
-                    }
-                  }
+                  "$ref": "#/components/schemas/UpdateUserByEmail_ResT"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request, \"email\" property is missing or invalid.",
+            "description": "Update object might contain invalid properties/values or email was not provided either.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/UpdateUserByEmail_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Invalid properties provided"
                 }
               }
             }
           },
           "401": {
-            "description": "Unauthorized, token is missing or expired.",
+            "description": "Token might be missing or expired, not owner or not admin.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/UpdateUserByEmail_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "You can't update another user's information"
                 }
               }
             }
           },
           "404": {
-            "description": "User not found",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/UpdateUserByEmail_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "User not found"
                 }
               }
             }
           },
           "500": {
-            "description": "Internal Server Error",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/UpdateUserByEmail_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Internal Server Error"
                 }
               }
             }
@@ -302,10 +216,176 @@
         }
       }
     },
-    "/users/id/{id}": {
+    "/api/users/email/{emailBase64}": {
       "get": {
-        "tags": ["users"],
-        "summary": "Get an user by id",
+        "tags": ["Users"],
+        "summary": "Retrieve user by email.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "emailBase64",
+            "in": "path",
+            "description": "Email of the user to fetch in Base64 format",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserByEmail_ResT"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserByEmail_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Email property is missing or invalid"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserByEmail_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Token is missing or expired"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserByEmail_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "User not found"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserByEmail_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete user by email.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "User can only delete himself. Must be admin to delete anyone",
+        "parameters": [
+          {
+            "name": "emailBase64",
+            "in": "path",
+            "description": "Email of the user to delete in Base64 format",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns deleted `User` object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteUserByEmail_ResT"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteUserByEmail_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Email is missing or invalid"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteUserByEmail_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Token is missing or expired"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteUserByEmail_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/id/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Retrieve user by id (deprecated use email instead)",
+        "deprecated": true,
         "security": [
           {
             "bearerAuth": []
@@ -315,7 +395,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "Id of the User to fetch",
+            "description": "Id of the user to fetch",
             "required": true,
             "schema": {
               "type": "string"
@@ -324,96 +404,67 @@
         ],
         "responses": {
           "200": {
-            "description": "Returns a Response object with fetched User object in \"response\" property",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": true
-                    },
-                    "response": {
-                      "$ref": "#/components/schemas/User"
-                    }
-                  }
+                  "$ref": "#/components/schemas/GetUserById_ResT"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request, id parameter is invalid.",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/GetUserById_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Id parameter is invalid"
                 }
               }
             }
           },
           "401": {
-            "description": "Unauthorized, token is missing or expired",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/GetUserById_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Token is missing or expired"
                 }
               }
             }
           },
           "404": {
-            "description": "User not found",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/GetUserById_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "User not found"
                 }
               }
             }
           },
           "500": {
-            "description": "Internal Server Error",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/GetUserById_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Internal Server Error"
                 }
               }
             }
@@ -421,8 +472,9 @@
         }
       },
       "put": {
-        "tags": ["users"],
-        "summary": "Update an User by id",
+        "tags": ["Users"],
+        "summary": "Update an User by id (deprecated use email instead)",
+        "deprecated": true,
         "security": [
           {
             "bearerAuth": []
@@ -433,7 +485,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "Id of the User to update",
+            "description": "Id of the user to update",
             "required": true,
             "schema": {
               "type": "string"
@@ -441,108 +493,79 @@
           }
         ],
         "requestBody": {
-          "description": "JSON object with any User properties to be updated.",
+          "description": "JSON object with any `User` properties to be updated.",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/UpdateUserById_ReqT"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Returns a Response object with updated User object in \"response\" property",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": true
-                    },
-                    "response": {
-                      "$ref": "#/components/schemas/User"
-                    }
-                  }
+                  "$ref": "#/components/schemas/UpdateUserById_ResT"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request, id parameter might be invalid, update object might contain invalid properties/values.",
+            "description": "The `id` parameter might be invalid, update object might contain invalid properties/values.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/UpdateUserById_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Invalid properties provided"
                 }
               }
             }
           },
           "401": {
-            "description": "Unauthorized, token might be missing or expired, not owner or not admin.",
+            "description": "Token might be missing or expired, not owner or not admin.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/UpdateUserById_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "You can't update another user's information"
                 }
               }
             }
           },
           "404": {
-            "description": "User not found",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/UpdateUserById_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "User not found"
                 }
               }
             }
           },
           "500": {
-            "description": "Internal Server Error",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/UpdateUserById_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Internal Server Error"
                 }
               }
             }
@@ -550,8 +573,9 @@
         }
       },
       "delete": {
-        "tags": ["users"],
-        "summary": "Delete an User by id",
+        "tags": ["Users"],
+        "summary": "Delete an user by id (deprecated use email instead)",
+        "deprecated": true,
         "security": [
           {
             "bearerAuth": []
@@ -562,7 +586,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "Id of the User to delete",
+            "description": "Id of the user to delete",
             "required": true,
             "schema": {
               "type": "string"
@@ -571,77 +595,53 @@
         ],
         "responses": {
           "200": {
-            "description": "Returns a Response object with deleted User object in \"response\" property",
+            "description": "Returns deleted `User` object",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": true
-                    },
-                    "response": {
-                      "$ref": "#/components/schemas/User"
-                    }
-                  }
+                  "$ref": "#/components/schemas/DeleteUserById_ResT"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request, id parameter might be invalid.",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/DeleteUserById_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Id parameter is invalid"
                 }
               }
             }
           },
           "401": {
-            "description": "Unauthorized, token might be missing or expired, not owner or not admin.",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/DeleteUserById_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Token is missing or expired"
                 }
               }
             }
           },
           "500": {
-            "description": "Internal Server Error",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/DeleteUserById_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Internal Server Error"
                 }
               }
             }
@@ -649,102 +649,69 @@
         }
       }
     },
-    "/auth/login": {
+    "/api/auth/login": {
       "post": {
-        "tags": ["auth"],
-        "summary": "Login service",
+        "tags": ["Auth"],
+        "summary": "Login service.",
         "requestBody": {
           "description": "Login information, email and password",
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "format": "email"
-                  },
-                  "password": {
-                    "type": "string"
-                  }
-                }
+                "$ref": "#/components/schemas/Login_ReqT"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Returns Response object. JWT token is sent in \"response\" property.",
+            "description": "JWT token is sent in `response` property.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": true
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Login_ResT"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request, email or password are missing.",
+            "description": "Either `email` or `password` are missing.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Login_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Email/Password not provided"
                 }
               }
             }
           },
           "403": {
-            "description": "Invalid email/password",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Login_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Invalid email/password"
                 }
               }
             }
           },
           "500": {
-            "description": "Internal Server Error",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "response": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Login_ResT"
+                },
+                "example": {
+                  "success": false,
+                  "response": "Internal Server Error"
                 }
               }
             }
@@ -762,15 +729,65 @@
       }
     },
     "schemas": {
-      "User": {
-        "description": "User schema for POST operations but no \"password\" field on GET operations",
+      "GetUsers_ResT": {
+        "title": "GetUsers_ResT",
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "response": {
+            "oneOf": [
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/User"
+                }
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "example": {
+          "success": true,
+          "response": [
+            {
+              "id": "04241908-0468-4a45-978a-9ae69e06b274",
+              "fullName": "John Doe",
+              "dni": "V-10.111.223",
+              "date_of_birth": "2002-04-12 00:00:00-04",
+              "phone_number": "+58 04121234567",
+              "email": "johndoe@email.com",
+              "avatar": "http://example.com/image.jpg",
+              "role": "USER_ROLE",
+              "isBachelor": true,
+              "status": "ACTIVE"
+            },
+            {
+              "id": "432ce0c7-6cf4-4f89-8510-0a9f0bb747b9",
+              "fullName": "Elizabeth Doe",
+              "dni": "E-23.456.353",
+              "date_of_birth": "1999-07-31 00:00:00-04",
+              "phone_number": "+1 555555555",
+              "email": "elizabeth@email.com",
+              "avatar": "http://example.com/image.png",
+              "role": "USER_ROLE",
+              "isBachelor": false,
+              "status": "PENDING"
+            }
+          ]
+        }
+      },
+      "CreateUser_ReqT": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
             "format": "ObjectId"
           },
-          "name": {
+          "fullName": {
             "type": "string"
           },
           "dni": {
@@ -799,18 +816,419 @@
             "enum": ["USER_ROLE", "ADMIN_ROLE"],
             "default": "USER_ROLE"
           },
-          "status": {
+          "isBachelor": {
             "type": "boolean",
-            "default": true
+            "default": false
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "PENDING", "INACTIVE"],
+            "default": "PENDING"
           }
         },
         "required": [
-          "name",
+          "fullName",
           "dni",
           "date_of_birth",
           "phone_number",
           "email",
           "password"
+        ],
+        "example": {
+          "fullName": "John Doe",
+          "dni": "V-10.111.223",
+          "date_of_birth": "2002-04-12 00:00:00-04",
+          "phone_number": "+58 04121234567",
+          "email": "johndoe@email.com",
+          "password": "MySuperSecurePass!!$$",
+          "isBachelor": true
+        }
+      },
+      "CreateUser_ResT": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "response": {
+            "oneOf": [
+              {
+                "type": "object",
+                "$ref": "#/components/schemas/User"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "example": {
+          "success": true,
+          "response": {
+            "id": "04241908-0468-4a45-978a-9ae69e06b274",
+            "fullName": "John Doe",
+            "dni": "V-10.111.223",
+            "date_of_birth": "2002-04-12 00:00:00-04",
+            "phone_number": "+58 04121234567",
+            "email": "johndoe@email.com",
+            "avatar": "http://example.com/image.jpg",
+            "role": "USER_ROLE",
+            "isBachelor": true,
+            "status": "ACTIVE"
+          }
+        }
+      },
+      "GetUserByEmail_ResT": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "response": {
+            "oneOf": [
+              {
+                "type": "object",
+                "$ref": "#/components/schemas/User"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "example": {
+          "success": true,
+          "response": {
+            "id": "04241908-0468-4a45-978a-9ae69e06b274",
+            "fullName": "John Doe",
+            "dni": "V-10.111.223",
+            "date_of_birth": "2002-04-12 00:00:00-04",
+            "phone_number": "+58 04121234567",
+            "email": "johndoe@email.com",
+            "avatar": "http://example.com/image.jpg",
+            "role": "USER_ROLE",
+            "isBachelor": true,
+            "status": "ACTIVE"
+          }
+        }
+      },
+      "UpdateUserByEmail_ReqT": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "ObjectId"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "dni": {
+            "type": "string"
+          },
+          "date_of_birth": {
+            "type": "string",
+            "format": "Date"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "email": {
+            "description": "Notice that email must be sent in update object",
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string",
+            "format": "URL"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["USER_ROLE", "ADMIN_ROLE"],
+            "default": "USER_ROLE"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "PENDING", "INACTIVE"],
+            "default": "PENDING"
+          }
+        },
+        "required": ["email"],
+        "example": {
+          "email": "johndoe@email.com",
+          "avatar": "http://example.com/image2.jpg"
+        }
+      },
+      "UpdateUserByEmail_ResT": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "response": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "success": true,
+          "response": "Updated successfuly"
+        }
+      },
+      "DeleteUserByEmail_ResT": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "response": {
+            "oneOf": [
+              {
+                "type": "object",
+                "$ref": "#/components/schemas/User"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "example": {
+          "success": true,
+          "response": {
+            "id": "04241908-0468-4a45-978a-9ae69e06b274",
+            "fullName": "John Doe",
+            "dni": "V-10.111.223",
+            "date_of_birth": "2002-04-12 00:00:00-04",
+            "phone_number": "+58 04121234567",
+            "email": "johndoe@email.com",
+            "avatar": "http://example.com/image2.jpg",
+            "role": "USER_ROLE",
+            "isBachelor": true,
+            "status": "ACTIVE"
+          }
+        }
+      },
+      "GetUserById_ResT": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "response": {
+            "oneOf": [
+              {
+                "type": "object",
+                "$ref": "#/components/schemas/User"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "example": {
+          "success": true,
+          "response": {
+            "id": "04241908-0468-4a45-978a-9ae69e06b274",
+            "fullName": "John Doe",
+            "dni": "V-10.111.223",
+            "date_of_birth": "2002-04-12 00:00:00-04",
+            "phone_number": "+58 04121234567",
+            "email": "johndoe@email.com",
+            "avatar": "http://example.com/image.jpg",
+            "role": "USER_ROLE",
+            "isBachelor": true,
+            "status": "ACTIVE"
+          }
+        }
+      },
+      "UpdateUserById_ReqT": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "ObjectId"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "dni": {
+            "type": "string"
+          },
+          "date_of_birth": {
+            "type": "string",
+            "format": "Date"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string",
+            "format": "URL"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["USER_ROLE", "ADMIN_ROLE"],
+            "default": "USER_ROLE"
+          },
+          "isBachelor": {
+            "type": "boolean",
+            "default": false
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "PENDING", "INACTIVE"],
+            "default": "PENDING"
+          }
+        },
+        "example": {
+          "avatar": "http://example.com/image2.jpg"
+        }
+      },
+      "UpdateUserById_ResT": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "response": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "success": true,
+          "response": "Updated successfuly"
+        }
+      },
+      "DeleteUserById_ResT": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "response": {
+            "oneOf": [
+              {
+                "type": "object",
+                "$ref": "#/components/schemas/User"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "example": {
+          "success": true,
+          "response": {
+            "id": "04241908-0468-4a45-978a-9ae69e06b274",
+            "fullName": "John Doe",
+            "dni": "V-10.111.223",
+            "date_of_birth": "2002-04-12 00:00:00-04",
+            "phone_number": "+58 04121234567",
+            "email": "johndoe@email.com",
+            "avatar": "http://example.com/image2.jpg",
+            "role": "USER_ROLE",
+            "isBachelor": true,
+            "status": "ACTIVE"
+          }
+        }
+      },
+      "Login_ReqT": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "email": "johndoe@email.com",
+          "password": "MySuperSecurePass!!$$"
+        }
+      },
+      "Login_ResT": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "response": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "success": true,
+          "response": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "ObjectId"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "dni": {
+            "type": "string"
+          },
+          "date_of_birth": {
+            "type": "string",
+            "format": "Date"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "Note: Password is NEVER returned in GET requests, but it's required in POST requests"
+          },
+          "avatar": {
+            "type": "string",
+            "format": "URL"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["USER_ROLE", "ADMIN_ROLE"],
+            "default": "USER_ROLE"
+          },
+          "isBachelor": {
+            "type": "boolean",
+            "default": false
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "PENDING", "INACTIVE"],
+            "default": "PENDING"
+          }
+        },
+        "required": [
+          "fullName",
+          "dni",
+          "date_of_birth",
+          "phone_number",
+          "email",
+          "password",
+          "isBachelor"
         ]
       }
     }
