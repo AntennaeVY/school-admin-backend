@@ -14,7 +14,7 @@ const swaggerDocumment = require("../openapi.json");
 // Custom modules
 const routes = require("./routes/routes");
 
-app.set("PORT", process.env.PORT || 3000);
+app.set("PORT", process.env.PORT || 3001);
 
 // Database
 require("./database/database");
