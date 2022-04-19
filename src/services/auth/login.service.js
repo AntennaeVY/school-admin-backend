@@ -5,18 +5,20 @@ const { encodeBase64 } = require("../../utils/encrypt");
 
 module.exports.login = async (email, password) => {
   const emailBase64 = encodeBase64(email);
-
   const user = await getOneByEmail(emailBase64, true);
 
-  if (!user) {
-    throw new Error("Invalid email/password");
+  if (user) {
+    const isPasswordValid = comparePassword(password, user.dataValues.password);
+
+    if (isPasswordValid) {
+      return {
+        accessToken: createToken(user.toToken()),
+        dni: user.dataValues.dni,
+        role: user.dataValues.role
+      };
+    }
   }
 
-  const isPasswordValid = comparePassword(password, user.dataValues.password);
+  throw new Error("Invalid email/password");
 
-  if (!isPasswordValid) {
-    throw new Error("Invalid email/password");
-  }
-
-  return createToken(user.toToken());
 };

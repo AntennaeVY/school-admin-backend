@@ -10,8 +10,9 @@ module.exports.login = (req, res) => {
     const { email, password } = req.body;
 
     login(email, password)
-      .then((token) => {
-        return response.success(res, token);
+      .then((authUser) => {
+        console.log(authUser)
+        return response.success(res, authUser);
       })
       .catch((err) => {
         return response.forbidden(res, err.message);
