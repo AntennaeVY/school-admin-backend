@@ -763,7 +763,8 @@
               "avatar": "http://example.com/image.jpg",
               "role": "USER_ROLE",
               "isBachelor": true,
-              "status": "ACTIVE"
+              "status": "ACTIVE",
+              "course": "Curso de Piloto"
             },
             {
               "id": "432ce0c7-6cf4-4f89-8510-0a9f0bb747b9",
@@ -775,7 +776,8 @@
               "avatar": "http://example.com/image.png",
               "role": "USER_ROLE",
               "isBachelor": false,
-              "status": "PENDING"
+              "status": "PENDING",
+              "course": "Curso de Tripulante de Cabina"
             }
           ]
         }
@@ -824,6 +826,10 @@
             "type": "string",
             "enum": ["ACTIVE", "PENDING", "INACTIVE"],
             "default": "PENDING"
+          },
+          "course": {
+            "type": "string",
+            "enum": ["Curso de Tripulante de Cabina", "Curso de Piloto"]
           }
         },
         "required": [
@@ -832,7 +838,8 @@
           "date_of_birth",
           "phone_number",
           "email",
-          "password"
+          "isBachelor",
+          "course"
         ],
         "example": {
           "fullName": "John Doe",
@@ -841,7 +848,8 @@
           "phone_number": "+58 04121234567",
           "email": "johndoe@email.com",
           "password": "MySuperSecurePass!!$$",
-          "isBachelor": true
+          "isBachelor": true,
+          "course": "Curso de Tripulante de Cabina"
         }
       },
       "CreateUser_ResT": {
@@ -874,7 +882,8 @@
             "avatar": "http://example.com/image.jpg",
             "role": "USER_ROLE",
             "isBachelor": true,
-            "status": "ACTIVE"
+            "status": "ACTIVE",
+            "course": "Curso de Tripulante de Piloto"
           }
         }
       },
@@ -908,7 +917,8 @@
             "avatar": "http://example.com/image.jpg",
             "role": "USER_ROLE",
             "isBachelor": true,
-            "status": "ACTIVE"
+            "status": "ACTIVE",
+            "course": "Curso de Tripulante de Cabina"
           }
         }
       },
@@ -953,6 +963,10 @@
             "type": "string",
             "enum": ["ACTIVE", "PENDING", "INACTIVE"],
             "default": "PENDING"
+          },
+          "course": {
+            "type": "string",
+            "enum": ["Curso de Tripulante de Cabina", "Curso de Piloto"]
           }
         },
         "required": ["email"],
@@ -1006,7 +1020,8 @@
             "avatar": "http://example.com/image2.jpg",
             "role": "USER_ROLE",
             "isBachelor": true,
-            "status": "ACTIVE"
+            "status": "ACTIVE",
+            "course": "Curso de Piloto"
           }
         }
       },
@@ -1040,7 +1055,8 @@
             "avatar": "http://example.com/image.jpg",
             "role": "USER_ROLE",
             "isBachelor": true,
-            "status": "ACTIVE"
+            "status": "ACTIVE",
+            "course": "Curso de Tripulante de Cabina"
           }
         }
       },
@@ -1088,6 +1104,10 @@
             "type": "string",
             "enum": ["ACTIVE", "PENDING", "INACTIVE"],
             "default": "PENDING"
+          },
+          "course": {
+            "type": "string",
+            "enum": ["Curso de Tripulante de Cabina", "Curso de Piloto"]
           }
         },
         "example": {
@@ -1139,7 +1159,8 @@
             "avatar": "http://example.com/image2.jpg",
             "role": "USER_ROLE",
             "isBachelor": true,
-            "status": "ACTIVE"
+            "status": "ACTIVE",
+            "course": "Curso de Tripulante de Cabina"
           }
         }
       },
@@ -1219,6 +1240,10 @@
             "type": "string",
             "enum": ["ACTIVE", "PENDING", "INACTIVE"],
             "default": "PENDING"
+          },
+          "course": {
+            "type": "string",
+            "enum": ["Curso de Tripulante de Cabina", "Curso de Piloto"]
           }
         },
         "required": [
@@ -1227,8 +1252,8 @@
           "date_of_birth",
           "phone_number",
           "email",
-          "password",
-          "isBachelor"
+          "isBachelor",
+          "course"
         ]
       }
     }

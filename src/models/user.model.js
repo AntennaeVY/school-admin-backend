@@ -132,6 +132,17 @@ User.init(
         },
       },
     },
+
+    course: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isIn: {
+          args: [["Curso de Tripulante de Cabina", "Curso de Piloto"]],
+          msg: "Invalid course",
+        },
+      },
+    },
   },
   { sequelize, modelName: "Users" }
 );
