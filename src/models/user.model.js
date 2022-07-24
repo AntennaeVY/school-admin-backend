@@ -106,10 +106,10 @@ User.init(
 
     role: {
       type: DataTypes.STRING,
-      defaultValue: "USER_ROLE",
+      defaultValue: "ASPIRANT_ROLE",
       validate: {
         isIn: {
-          args: [["USER_ROLE", "ADMIN_ROLE", "TEACHER_ROLE"]],
+          args: [["USER_ROLE", "ADMIN_ROLE", "TEACHER_ROLE", "ASPIRANT_ROLE"]],
           msg: "Invalid role format",
         },
       },
